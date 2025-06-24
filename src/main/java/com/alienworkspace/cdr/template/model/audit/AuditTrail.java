@@ -5,6 +5,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -37,19 +38,19 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class AuditTrail {
 
     @CreatedBy
-    @Column(name = "created_by", updatable = false)
+    @Column(name = "created_by", updatable = false, nullable = false)
     private long createdBy;
 
     @CreatedDate
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at", updatable = false,  nullable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedBy
-    @Column(name = "last_modified_by", insertable = false)
+    @Column(name = "last_modified_by")
     private Long lastModifiedBy;
 
     @LastModifiedDate
-    @Column(name = "last_modified_at", insertable = false)
+    @Column(name = "last_modified_at")
     private LocalDateTime lastModifiedAt;
 
     private boolean voided = false;
@@ -63,5 +64,13 @@ public class AuditTrail {
     @Column(name = "void_reason")
     private String voidReason;
 
+    @Column(name = "uuid", updatable = false, nullable = false, unique = true)
     private String uuid = UUID.randomUUID().toString();
+
+    @PrePersist
+    public void generateUuid() {
+        if (uuid == null) {
+            this.uuid = UUID.randomUUID().toString();
+        }
+    }
 }
