@@ -65,3 +65,10 @@ info:
     name: "template"
     description: "Microservice Template"
     version: "1.0.0"
+
+logging:
+  level:
+    com:
+      alienworkspace:
+        cdr:
+          template: DEBUG
