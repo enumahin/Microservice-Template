@@ -6,6 +6,10 @@ spring:
   profiles:
     active:
       - "prod"
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
 
   datasource:
     driverClassName: org.h2.Driver
@@ -72,3 +76,12 @@ logging:
       alienworkspace:
         cdr:
           template: DEBUG
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 2
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
